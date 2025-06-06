@@ -3,6 +3,7 @@ services:
     image: traefik:v3.1
     ports:
       - "8080:80"
+      - "8081:8080"
     volumes:
       - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
       - ./traefik/dynamic-config.yml:/etc/traefik/dynamic-config.yml:ro
