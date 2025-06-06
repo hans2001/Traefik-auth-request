@@ -1,0 +1,15 @@
+# API and dashboard
+api:
+  dashboard: true
+  insecure: true  # For development only
+
+# Entry points
+entryPoints:
+  web:
+    address: ":80"
+
+# Providers
+providers:
+  file:
+    filename: /etc/traefik/dynamic-config.yml
+    watch: true  # Reload on changes
