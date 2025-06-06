@@ -1,7 +1,10 @@
 # API and dashboard
 api:
   dashboard: true
-  insecure: true  # For development only
+  insecure: true
+
+log:
+  level: DEBUG
 
 # Entry points
 entryPoints:
@@ -12,4 +15,4 @@ entryPoints:
 providers:
   file:
     filename: /etc/traefik/dynamic-config.yml
-    watch: true  # Reload on changes
+    watch: true

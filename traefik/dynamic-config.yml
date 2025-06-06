@@ -9,10 +9,16 @@ http:
         authResponseHeaders:
           - "X-Auth-User"
         trustForwardHeader: true
+    
+    rewrite-to-health:
+      replacePath:
+        path: "/health"
+    
     add-auth-headers:
       headers:
         customRequestHeaders:
           X-Original-URI: "{path}"
+  
   # Routers
   routers:
     health-router:
@@ -22,11 +28,12 @@ http:
       middlewares:
         - add-auth-headers
         - auth-middleware
-      service: health-service
+        - rewrite-to-health
+      service: auth-service
 
   # Services
   services:
-    health-service:
+    auth-service:
       loadBalancer:
         servers:
-          - url: "http://auth:5000/health"
+          - url: "http://auth:5000"
