@@ -1,15 +1,19 @@
 services:
+  traefik:
+    image: traefik:v3.1
+    ports:
+      - "8080:80"
+      - "8081:8080"
+    volumes:
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik/dynamic-config.yml:/etc/traefik/dynamic-config.yml:ro
+    depends_on:
+      - auth
+
   auth:
     build:
       context: ./auth
     volumes:
       - ./auth/auth.py:/app/auth.py
-  nginx:
-    build:
-      context: ./nginx
-    volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-    ports:
-      - "8080:80"
-    depends_on:
-      - auth
+    expose:
+      - "5000"

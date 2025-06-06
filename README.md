@@ -1,20 +1,27 @@
-# Nginx Auth Request Demo
+# Traefik Auth Request Demo
 
-This project demonstrates how to use Nginx's `auth_request` module to authenticate requests based on HTTP headers.
+This project demonstrates how to use Traefik's ForwardAuth middleware to authenticate requests based on HTTP headers, replacing the previous Nginx auth_request implementation.
 
 ## Architecture
 
-The setup consists of three services:
+The setup consists of two services:
 
-2. **Auth**: A Flask service that validates the `x-pretest` header.
-3. **Nginx**: Acts as a gateway, using `auth_request` to validate incoming requests.
+1. **Auth**: A Flask service that validates the `x-pretest` header.
+2. **Traefik**: Acts as a gateway, using ForwardAuth middleware to validate incoming requests.
 
 ## How it works
 
-1. The client sends requests to Nginx with or without the `x-pretest` header
-2. Nginx forwards the authentication headers to the auth service
+1. The client sends requests to Traefik with or without the `x-pretest` header
+2. Traefik forwards the request headers to the auth service via ForwardAuth middleware
 3. The auth service checks if the `x-pretest` header contains a valid token
-4. If authentication succeeds, Nginx processes the request; otherwise, it returns a 401 error
+4. If authentication succeeds (200 response), Traefik routes to the backend service; otherwise, it returns a 401 error
+
+## Configuration Approach
+
+Following production Kubernetes standards:
+- File-based YAML configuration (not Docker labels)
+- IngressRoute-style structure for easy migration to Kubernetes
+- Dynamic configuration without restart requirements
 
 ## Valid Authentication
 
@@ -26,7 +33,7 @@ A valid request must include the header: `x-pretest: valid-token`
 docker-compose up --build
 ```
 
-## Testing
+## Testing 
 
 You can test manually:
 
